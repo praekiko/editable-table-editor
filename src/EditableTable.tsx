@@ -42,8 +42,8 @@ const EditableTable = () => {
   };
 
   return (
-    <div>
-      <div style={{ marginTop: '1rem', maxWidth: '200px' }}>
+    <div style={{ marginBottom: '2rem' }}>
+      <div style={{ maxWidth: '200px' }}>
         <Select
           id="table-list"
           name={'table-list'}

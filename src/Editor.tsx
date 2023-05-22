@@ -32,7 +32,7 @@ const plugins = createPlugins(
 
 export default function Editor() {
   return (
-    <div style={{ marginTop: '1rem', marginBottom: '2rem' }}>
+    <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
       <PlateProvider plugins={plugins}>
         <Plate editableProps={editableProps} />
       </PlateProvider>

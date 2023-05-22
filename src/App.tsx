@@ -52,8 +52,8 @@ function App() {
                 Created at {createdAt.toLocaleDateString()} at{' '}
                 {createdAt.toLocaleTimeString()}
               </p>
-              <EditableTable />
               <Editor />
+              <EditableTable />
             </Fragment>
           );
         })}
