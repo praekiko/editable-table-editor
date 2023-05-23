@@ -41,6 +41,34 @@ const EditableTable = () => {
     }
   };
 
+  const onSuggestionChange = (
+    newValue: OnChangeValue<Option, false>,
+    rowIndex: number,
+    columnIndex: number
+  ) => {
+    if (tableData) {
+      const updatedRows = tableData.rows.map((columns, index) => {
+        if (index === rowIndex) {
+          return columns.map((column, colIndex) => {
+            if (columnIndex === colIndex) {
+              return { ...column, value: newValue?.label };
+            }
+
+            if (colIndex > columnIndex) {
+              return { ...column, value: undefined };
+            }
+
+            return column;
+          });
+        }
+
+        return columns;
+      });
+
+      setTableData({ ...tableData, rows: updatedRows });
+    }
+  };
+
   return (
     <div style={{ marginBottom: '2rem' }}>
       <div style={{ maxWidth: '200px' }}>
@@ -74,26 +102,54 @@ const EditableTable = () => {
           </thead>
 
           <tbody>
-            {tableData.rows.map((row, index) => (
-              <tr key={index}>
-                {row.map(({ value, id }) => (
-                  <td key={id}>
-                    {id === 'count' ? (
-                      <strong>{(index + 1).toString()}</strong>
-                    ) : (
-                      <>
-                        {tableData.suggestions[id] ? (
+            {tableData.rows.map((columns, rowIndex) => {
+              return (
+                <tr key={rowIndex}>
+                  {columns.map((column, colIndex) => {
+                    if (column.id === 'count') {
+                      return (
+                        <td key={colIndex}>
+                          <strong>{(rowIndex + 1).toString()}</strong>
+                        </td>
+                      );
+                    }
+
+                    const columnConfig = tableData.columns.find(
+                      (col) => col.id === column.id
+                    );
+
+                    if (columnConfig && columnConfig.suggestions) {
+                      const prevColumn = tableData.columns[colIndex - 1];
+                      const prevColumnRowData = columns.find(
+                        (column) => column.id === prevColumn.id
+                      );
+                      const suggestions =
+                        prevColumnRowData && prevColumnRowData.value
+                          ? columnConfig.suggestions[prevColumnRowData.value] ??
+                            columnConfig.suggestions.default
+                          : columnConfig.suggestions.default;
+
+                      return (
+                        <td key={colIndex}>
                           <Select
+                            key={`${column.id}-${colIndex}`}
+                            id={`${column.id}-${colIndex}`}
+                            name={`${column.id}-${colIndex}`}
                             components={{
                               DropdownIndicator: () => null,
                               IndicatorSeparator: () => null,
                             }}
-                            id={`${id}-${index}`}
-                            name={`${id}-${index}`}
-                            options={tableData.suggestions[id]}
-                            defaultValue={tableData.suggestions[id].find(
-                              (option) => option.label === value
-                            )}
+                            options={suggestions}
+                            onChange={(newValue) =>
+                              onSuggestionChange(newValue, rowIndex, colIndex)
+                            }
+                            value={
+                              !column.value
+                                ? null
+                                : suggestions.find(
+                                    (option) => option.label === column.value
+                                  )
+                            }
                             placeholder=""
                             styles={{
                               control: (baseStyles) => ({
@@ -102,23 +158,27 @@ const EditableTable = () => {
                               }),
                             }}
                           />
-                        ) : (
-                          <input
-                            className="editableInput"
-                            id={`${id}-${index}`}
-                            name={`${id}-${index}`}
-                            value={value}
-                            type="text"
-                            onChange={onChangeInput}
-                            placeholder="Type..."
-                          />
-                        )}
-                      </>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
+                        </td>
+                      );
+                    }
+
+                    return (
+                      <td key={colIndex}>
+                        <input
+                          className="editableInput"
+                          id={`${column.id}-${colIndex}`}
+                          name={`${column.id}-${colIndex}`}
+                          value={column.value}
+                          type="text"
+                          onChange={onChangeInput}
+                          placeholder="Type..."
+                        />
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
 
           <tfoot>
