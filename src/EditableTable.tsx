@@ -41,6 +41,15 @@ const EditableTable = () => {
     }
   };
 
+  const onRemoveRow = (rowIndex: number) => {
+    if (tableData) {
+      const filteredRows = tableData.rows.filter(
+        (_, index) => index !== rowIndex
+      );
+      setTableData({ ...tableData, rows: filteredRows });
+    }
+  };
+
   const onSuggestionChange = (
     newValue: OnChangeValue<Option, false>,
     rowIndex: number,
@@ -91,8 +100,8 @@ const EditableTable = () => {
         <table style={{ marginTop: '1rem' }}>
           <thead>
             <tr>
-              {tableData.headers.map(({ title, id }) => (
-                <th key={id}>
+              {tableData.headers.map(({ title, id, width }) => (
+                <th key={id} style={width ? { width } : {}}>
                   <p>
                     <strong>{title}</strong>
                   </p>
@@ -110,6 +119,18 @@ const EditableTable = () => {
                       return (
                         <td key={colIndex}>
                           <strong>{(rowIndex + 1).toString()}</strong>
+                        </td>
+                      );
+                    }
+
+                    if (column.id === 'remove') {
+                      return (
+                        <td
+                          key={colIndex}
+                          onClick={() => onRemoveRow(rowIndex)}
+                          className="removeRow"
+                        >
+                          ✕
                         </td>
                       );
                     }
@@ -182,8 +203,12 @@ const EditableTable = () => {
           </tbody>
 
           <tfoot>
-            <tr onClick={onAddRow}>
-              <td colSpan={tableData.headers.length} className="addRow">
+            <tr>
+              <td
+                onClick={onAddRow}
+                colSpan={tableData.headers.length}
+                className="addRow"
+              >
                 ➕ New
               </td>
             </tr>

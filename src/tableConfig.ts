@@ -7,6 +7,7 @@ export enum TableType {
 interface TableHeader {
   id: string;
   title: string;
+  width?: string;
 }
 
 type TableColumnSuggestion = {
@@ -37,9 +38,10 @@ export interface TableContent {
 
 const table1: TableContent = {
   headers: [
-    { id: 'count', title: '' },
-    { id: 'physical_exam', title: 'Physical exam' },
+    { id: 'count', title: '', width: '10%' },
+    { id: 'physical_exam', title: 'Physical exam', width: '40%' },
     { id: 'description', title: 'Description' },
+    { id: 'remove', title: '', width: '2%' },
   ],
   columns: [
     { order: 0, id: 'count' },
@@ -112,42 +114,49 @@ const table1: TableContent = {
         ],
       },
     },
+    { order: 3, id: 'remove' },
   ],
   rows: [
     [
       { id: 'count' },
       { id: 'physical_exam', value: 'HEENT' },
       { id: 'description', value: '' },
+      { id: 'remove' },
     ],
     [
       { id: 'count' },
       { id: 'physical_exam', value: 'Heart' },
       { id: 'description', value: '' },
+      { id: 'remove' },
     ],
     [
       { id: 'count' },
       { id: 'physical_exam', value: 'Lung' },
       { id: 'description', value: '' },
+      { id: 'remove' },
     ],
     [
       { id: 'count' },
       { id: 'physical_exam', value: 'Abdomen' },
       { id: 'description', value: '' },
+      { id: 'remove' },
     ],
     [
       { id: 'count' },
       { id: 'physical_exam', value: 'Extremities' },
       { id: 'description', value: '' },
+      { id: 'remove' },
     ],
   ],
 };
 
 const table2: TableContent = {
   headers: [
-    { id: 'count', title: '' },
-    { id: 'medication_name', title: 'Medication name' },
+    { id: 'count', title: '', width: '10%' },
+    { id: 'medication_name', title: 'Medication name', width: '40%' },
     { id: 'instruction', title: 'Instruction' },
-    { id: 'quantity', title: 'Quantity' },
+    { id: 'quantity', title: 'Quantity', width: '10%' },
+    { id: 'remove', title: '', width: '2%' },
   ],
   columns: [
     { order: 0, id: 'count' },
@@ -209,6 +218,7 @@ const table2: TableContent = {
         ],
       },
     },
+    { order: 4, id: 'remove' },
   ],
   rows: [
     [
@@ -216,15 +226,17 @@ const table2: TableContent = {
       { id: 'medication_name', value: '' },
       { id: 'instruction', value: '' },
       { id: 'quantity', value: '' },
+      { id: 'remove' },
     ],
   ],
 };
 
 const table3: TableContent = {
   headers: [
-    { id: 'count', title: '' },
+    { id: 'count', title: '', width: '10%' },
     { id: 'follow_up', title: 'Follow up' },
-    { id: 'result', title: 'Result' },
+    { id: 'result', title: 'Result', width: '10%' },
+    { id: 'remove', title: '', width: '2%' },
   ],
   columns: [
     { order: 0, id: 'count' },
@@ -240,12 +252,14 @@ const table3: TableContent = {
         ],
       },
     },
+    { order: 3, id: 'remove' },
   ],
   rows: [
     [
       { id: 'count' },
       { id: 'follow_up', value: 'clinical improved?' },
       { id: 'result', value: '' },
+      { id: 'remove' },
     ],
   ],
 };
